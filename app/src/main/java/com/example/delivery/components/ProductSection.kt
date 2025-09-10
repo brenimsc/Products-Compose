@@ -15,7 +15,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.delivery.model.Product
-import com.example.delivery.sampleProducts
+import com.example.delivery.sampleSavory
 
 @Composable
 fun ProductSection(
@@ -23,7 +23,8 @@ fun ProductSection(
     products: List<Product>,
     modifier: Modifier = Modifier
 ) {
-    Column(modifier) {
+    Section(
+        title = {
         Text(
             text = title,
             modifier = Modifier.padding(
@@ -32,7 +33,7 @@ fun ProductSection(
             fontSize = 20.sp,
             fontWeight = FontWeight(400)
         )
-
+    }, content = {
         LazyRow(
             modifier = Modifier
                 .padding(vertical = 8.dp)
@@ -44,15 +45,17 @@ fun ProductSection(
                 ProductItem(item)
             }
         }
-    }
+    },
+        modifier = modifier
+    )
 }
 
 @Preview(showBackground = true)
 @Composable
 private fun ProductSectionPreview() {
     Column {
-        ProductSection(title = "Comidas", sampleProducts)
-        ProductSection(title = "Bebidas", sampleProducts)
-        ProductSection(title = "Doces", sampleProducts)
+        ProductSection(title = "Comidas", sampleSavory)
+        ProductSection(title = "Bebidas", sampleSavory)
+        ProductSection(title = "Doces", sampleSavory)
     }
 }

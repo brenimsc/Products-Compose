@@ -18,7 +18,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -30,7 +30,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.delivery.extensions.toBrazilianCurrency
 import com.example.delivery.model.Product
-import com.example.delivery.sampleProducts
+import com.example.delivery.sampleSavory
 import com.example.delivery.ui.theme.DeliveryTheme
 import com.example.delivery.ui.theme.Purple80
 import java.math.BigDecimal
@@ -40,7 +40,7 @@ fun CardProductItem(
     product: Product,
     modifier: Modifier = Modifier
 ) {
-    var expandend by remember { mutableStateOf(false) }
+    var expandend by rememberSaveable { mutableStateOf(false) }
 
     Card(
         modifier = modifier
@@ -81,27 +81,29 @@ fun CardProductItem(
                 )
             }
 
-            product.description?.let {
+            takeIf { expandend }?.run {
+                product.description?.let {
 
-                Text(
-                    text = product.description,
-                    modifier = Modifier
-                        .padding(start = 16.dp, end = 16.dp, top = 16.dp)
-                        .fillMaxWidth(),
-                    color = Color.Black,
-                    overflow = takeIf { expandend }?.run { TextOverflow.Visible }
-                        ?: TextOverflow.Ellipsis,
-                    maxLines = takeIf { expandend }?.run { Int.MAX_VALUE } ?: 4
-                )
+                    Text(
+                        text = product.description,
+                        modifier = Modifier
+                            .padding(start = 16.dp, end = 16.dp, top = 16.dp)
+                            .fillMaxWidth(),
+                        color = Color.Black,
+                        overflow = takeIf { expandend }?.run { TextOverflow.Visible }
+                            ?: TextOverflow.Ellipsis,
+                        maxLines = takeIf { expandend }?.run { Int.MAX_VALUE } ?: 4
+                    )
 
-                Icon(
-                    takeIf { expandend }?.run { Icons.Default.KeyboardArrowUp }
-                        ?: Icons.Default.KeyboardArrowDown,
-                    contentDescription = null,
-                    modifier = Modifier
-                        .align(androidx.compose.ui.Alignment.CenterHorizontally)
-                        .padding(bottom = 8.dp, end = 16.dp)
-                )
+                    Icon(
+                        takeIf { expandend }?.run { Icons.Default.KeyboardArrowUp }
+                            ?: Icons.Default.KeyboardArrowDown,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .align(androidx.compose.ui.Alignment.CenterHorizontally)
+                            .padding(bottom = 8.dp, end = 16.dp)
+                    )
+                }
             }
         }
     }
@@ -112,7 +114,7 @@ fun CardProductItem(
 private fun CardProductPreview() {
     DeliveryTheme {
         Surface {
-            CardProductItem(product = sampleProducts.random())
+            CardProductItem(product = sampleSavory.random())
         }
     }
 }
